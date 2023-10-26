@@ -16,6 +16,8 @@ export class AppComponent {
     }
   ) 
   filteredStatus = '';
+  sortKey = '';
+
   servers = [
     {
       instanceType: 'medium',
@@ -53,9 +55,13 @@ export class AppComponent {
   onAddServer(){
     this.servers.push({
       instanceType: 'small',
-      name: 'test Server',
+      name: 'New Server',
       status: 'offline',
       started: new Date(15, 1, 2017)
     })
+  }
+
+  onSort(){
+
   }
 }
