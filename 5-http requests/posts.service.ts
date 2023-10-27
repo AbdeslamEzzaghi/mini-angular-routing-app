@@ -1,23 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Post } from './post.model';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { Subject, map, throwError ,catchError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
 
+  refreshPosts = new Subject<string>();
+  
   apiURL = 'https://my-angular-s-back-end-api-default-rtdb.europe-west1.firebasedatabase.app/posts.json';
   
   constructor(private http: HttpClient) {}
 
   createAndStorePost(postData: Post) {
-    return this.http
+    this.http
       .post<{ name: string }>(
         this.apiURL,
         postData
-      )
+    ).subscribe(
+      response => {
+        console.log(response);
+        this.refreshPosts.next('ok');
+      },
+    )
 
   }
 
@@ -37,7 +44,11 @@ export class PostsService {
           }
 
           return postsArr;
-        })
+        })/*,catchError(
+          errRes => {
+            return throwError(errRes)
+          }
+        )*/
       );
   }
 
